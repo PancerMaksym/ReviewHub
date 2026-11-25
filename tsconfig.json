@@ -4,7 +4,37 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/ReviewHub"
+      "path": "./apps/frontend"
+    },
+    {
+      "path": "./apps/review-service-e2e"
+    },
+    {
+      "path": "./apps/auth-service-e2e"
+    },
+    {
+      "path": "./apps/api-gateway-e2e"
+    },
+    {
+      "path": "./apps/review-service"
+    },
+    {
+      "path": "./apps/auth-service"
+    },
+    {
+      "path": "./apps/api-gateway"
+    },
+    {
+      "path": "./libs/prisma"
+    },
+    {
+      "path": "./libs/entity"
+    },
+    {
+      "path": "./libs/dto"
+    },
+    {
+      "path": "./libs/enums"
     }
   ]
 }

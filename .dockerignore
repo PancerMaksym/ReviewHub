@@ -1,0 +1,72 @@
+# Git
+.git
+.gitignore
+
+# Node
+./node_modules
+.pnp.*
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Yarn cache (не потрібен, якщо не використовуєш zero-install)
+.yarn/cache
+
+# Build output
+dist
+**/dist
+coverage
+**/coverage
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+
+# Kubernetes
+.kube
+
+# Testing
+.nyc_output
+
+# Temporary
+tmp
+temp
+.cache
+
+# Documentation
+README.md
+docs
+
+# GitHub
+.github
+
+# Local scripts
+*.sh
+
+# Nx (якщо використовуєш)
+.nx/cache
+
+# Turborepo (якщо колись перейдеш)
+.turbo

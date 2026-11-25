@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MediaType {
+  MOVIE
+  SERIAL
+  BOOK
+}
+
+model User {
+  id            Int                 @default(autoincrement()) @id
+  email         String              @unique
+  password      String?
+  oAuthProviders OAuthProvider[]
+  name          String?
+  avatar        String?
+  posts         Post[]
+  followers     Follow[]            @relation("Followers")
+  following     Follow[]            @relation("Following")
+  comments      Comment[]
+  likes         Like[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+}
+
+model Post {
+  id            Int                 @default(autoincrement()) @id
+  title         String
+  content       String
+  media         Media               @relation(fields: [mediaId], references: [id])
+  mediaId       Int
+  user          User                @relation(fields: [userId], references: [id])
+  userId        Int
+  comments      Comment[]
+  likes         Like[]
+  translations  PostTranslation[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+}
+
+model Media {
+  id            Int                 @id @default(autoincrement())
+  title         String
+  type          MediaType
+  releaseYear   Int?
+  author        Author              @relation(fields: [authorId], references: [id])
+  authorId      Int
+  genres        String[]
+  image         String?
+  reviews       Post[]
+  translations  MediaTranslation[]
+}
+
+model Author {
+  id          Int                   @id @default(autoincrement())
+  name        String                @unique
+  image       String?
+  media       Media[]
+}
+
+model Comment {
+  id            Int                 @default(autoincrement()) @id
+  user          User                @relation(fields: [userId], references: [id])
+  userId        Int
+  post          Post                @relation(fields: [postId], references: [id])
+  postId        Int
+  content       String
+  translations  CommentTranslation[]
+  createdAt     DateTime            @default(now())
+}
+
+model Like {
+  id            Int                 @default(autoincrement()) @id
+  user          User                @relation(fields: [userId], references: [id])
+  userId        Int
+  post          Post                @relation(fields: [postId], references: [id])
+  postId        Int
+  createdAt     DateTime            @default(now())
+  @@unique([userId, postId])
+}
+
+model Follow {
+  id            Int                 @id @default(autoincrement())
+  follower      User                @relation("Following", fields: [followerId], references: [id])
+  followerId    Int
+  following     User                @relation("Followers", fields: [followingId], references: [id])
+  followingId   Int
+  createdAt     DateTime            @default(now())
+  @@unique([followerId, followingId])
+}
+
+model PostTranslation {
+  id            Int                 @id @default(autoincrement())
+  language      String
+  content       String
+  post          Post                @relation(fields: [postId], references: [id])
+  postId        Int
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  @@unique([postId, language])
+}
+
+model MediaTranslation {
+  id            Int                 @id @default(autoincrement())
+  language      String
+  name          String
+  author        String
+  genres        String[]
+  media         Media               @relation(fields: [mediaId], references: [id])
+  mediaId       Int
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  @@unique([mediaId, language])
+}
+
+model CommentTranslation {
+  id            Int                 @id @default(autoincrement())
+  language      String
+  content       String
+  comment       Comment             @relation(fields: [commentId], references: [id])
+  commentId     Int
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  @@unique([commentId, language])
+}
+
+
+enum OAuthProviderEnum {
+  GOOGLE
+  GITHUB
+  LOCAL
+}
+
+model OAuthProvider {
+  id                Int           @id @default(autoincrement())
+  provider          OAuthProviderEnum
+  providerAccountId String
+  userId            Int
+  user              User          @relation( fields: [userId],references: [id],onDelete: Cascade)
+
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@unique([provider])
+  @@index([userId])
+}

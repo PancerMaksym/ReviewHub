@@ -1,0 +1,63 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: auth-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: review-hub-auth
+  template:
+    metadata:
+      labels:
+        app: review-hub-auth
+    spec:
+      containers:
+        - name: nest-auth
+          image: pantsyrmaksym/review-hub-auth:latest
+          imagePullPolicy: Always
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: JWT_SECRET
+            - name: GOOGLE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: GOOGLE_ID
+            - name: GITHUB_ID
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: GITHUB_ID
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  type: ClusterIP
+  selector:
+    app: review-hub-auth
+  ports:
+    - port: 3000
+      targetPort: 3000

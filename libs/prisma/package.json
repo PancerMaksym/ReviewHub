@@ -1,0 +1,27 @@
+{
+  "name": "@review-hub/prisma",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    }
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.9.1",
+    "dotenv": "^17.4.2",
+    "pg": "^8.22.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.20.3",
+    "prisma": "^7.9.1"
+  },
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
+  }
+}
